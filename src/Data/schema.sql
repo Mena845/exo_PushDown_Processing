@@ -32,3 +32,11 @@ INSERT INTO invoice (customer_name, status) VALUES
                                                 ('Alice', 'CONFIRMED'),
                                                 ('Bob', 'PAID'),
                                                 ('Charlie', 'DRAFT');
+
+-- insertion des donnees dans invoice_line
+INSERT INTO invoice_line (invoice_id, label, quantity, unit_price) VALUES
+                                                                       (1, 'Produit A', 2, 100.00),
+                                                                       (1, 'Produit B', 1, 50.00),
+                                                                       (2, 'Produit A', 5, 100.00),
+                                                                       (2, 'Service C', 1, 200.00),
+                                                                       (3, 'Produit B', 3, 50.00);
