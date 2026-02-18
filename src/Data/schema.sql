@@ -40,3 +40,7 @@ INSERT INTO invoice_line (invoice_id, label, quantity, unit_price) VALUES
                                                                        (2, 'Produit A', 5, 100.00),
                                                                        (2, 'Service C', 1, 200.00),
                                                                        (3, 'Produit B', 3, 50.00);
+
+-- Tax configuration
+INSERT INTO tax_config (label, rate) VALUES
+    ('TVA STANDARD', 20.00);
