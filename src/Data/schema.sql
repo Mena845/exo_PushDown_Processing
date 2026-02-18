@@ -19,3 +19,10 @@ CREATE TABLE invoice_line (
                               quantity INT NOT NULL CHECK (quantity > 0),
                               unit_price NUMERIC(10,2) NOT NULL CHECK (unit_price >= 0)
 );
+
+-- creation de la table tax_config
+CREATE TABLE tax_config (
+                            id SERIAL PRIMARY KEY,
+                            label VARCHAR(255) NOT NULL,
+                            rate NUMERIC(5,2) NOT NULL CHECK (rate >= 0)
+);
