@@ -44,3 +44,4 @@ INSERT INTO invoice_line (invoice_id, label, quantity, unit_price) VALUES
 -- Tax configuration
 INSERT INTO tax_config (label, rate) VALUES
     ('TVA STANDARD', 20.00);
+
