@@ -26,3 +26,9 @@ CREATE TABLE tax_config (
                             label VARCHAR(255) NOT NULL,
                             rate NUMERIC(5,2) NOT NULL CHECK (rate >= 0)
 );
+
+-- insertion des donnes dans invoice
+INSERT INTO invoice (customer_name, status) VALUES
+                                                ('Alice', 'CONFIRMED'),
+                                                ('Bob', 'PAID'),
+                                                ('Charlie', 'DRAFT');
