@@ -11,3 +11,11 @@ CREATE TABLE invoice (
                          status invoice_status NOT NULL
 );
 
+-- creation de la table invoice_line
+CREATE TABLE invoice_line (
+                              id SERIAL PRIMARY KEY,
+                              invoice_id INT NOT NULL REFERENCES invoice(id) ON DELETE CASCADE,
+                              label VARCHAR(255) NOT NULL,
+                              quantity INT NOT NULL CHECK (quantity > 0),
+                              unit_price NUMERIC(10,2) NOT NULL CHECK (unit_price >= 0)
+);
