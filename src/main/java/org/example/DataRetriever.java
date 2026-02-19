@@ -164,4 +164,32 @@ public class DataRetriever {
         return result;
     }
 
+    // Q5-B - CA TTC pondéré
+
+    public BigDecimal computeWeightedTurnoverTtc() throws SQLException {
+
+        String sql = """
+            SELECT SUM(
+                CASE
+                    WHEN i.status = 'PAID'
+                        THEN (il.quantity * il.unit_price) * (1 + t.rate / 100)
+                    WHEN i.status = 'CONFIRMED'
+                        THEN (il.quantity * il.unit_price) * (1 + t.rate / 100) * 0.5
+                    ELSE 0
+                END
+            ) AS weighted_turnover_ttc
+            FROM invoice i
+            JOIN invoice_line il ON il.invoice_id = i.id
+            CROSS JOIN tax_config t
+        """;
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getBigDecimal("weighted_turnover_ttc");
+            }
+        }
+        return BigDecimal.ZERO;
+    }
 }
