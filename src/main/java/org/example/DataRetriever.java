@@ -71,4 +71,34 @@ public class DataRetriever {
         }
         return result;
     }
+
+    // Q3 - Totaux cumulés par statut
+
+    public InvoiceStatusTotals computeStatusTotals() throws SQLException {
+
+        String sql = """
+            SELECT
+                SUM(CASE WHEN i.status = 'PAID'
+                         THEN il.quantity * il.unit_price ELSE 0 END) AS total_paid,
+                SUM(CASE WHEN i.status = 'CONFIRMED'
+                         THEN il.quantity * il.unit_price ELSE 0 END) AS total_confirmed,
+                SUM(CASE WHEN i.status = 'DRAFT'
+                         THEN il.quantity * il.unit_price ELSE 0 END) AS total_draft
+            FROM invoice i
+            JOIN invoice_line il ON il.invoice_id = i.id
+        """;
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return new InvoiceStatusTotals(
+                        rs.getDouble("total_paid"),
+                        rs.getDouble("total_confirmed"),
+                        rs.getDouble("total_draft")
+                );
+            }
+        }
+        return new InvoiceStatusTotals(0, 0, 0);
+    }
 }
