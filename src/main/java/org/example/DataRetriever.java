@@ -12,9 +12,8 @@ public class DataRetriever {
         this.connection = connection;
     }
 
-    // ===============================
     // Q1 - Total par facture
-    // ===============================
+
     public List<InvoiceTotal> findInvoiceTotals() throws SQLException {
 
         String sql = """
@@ -22,6 +21,36 @@ public class DataRetriever {
                    SUM(il.quantity * il.unit_price) AS total
             FROM invoice i
             JOIN invoice_line il ON il.invoice_id = i.id
+            GROUP BY i.id, i.customer_name, i.status
+            ORDER BY i.id
+        """;
+
+        List<InvoiceTotal> result = new ArrayList<>();
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                result.add(new InvoiceTotal(
+                        rs.getInt("id"),
+                        rs.getString("customer_name"),
+                        rs.getString("status"),
+                        rs.getDouble("total")
+                ));
+            }
+        }
+        return result;
+    }
+
+    // Q2 - CONFIRMED + PAID
+    public List<InvoiceTotal> findConfirmedAndPaidInvoiceTotals() throws SQLException {
+
+        String sql = """
+            SELECT i.id, i.customer_name, i.status,
+                   SUM(il.quantity * il.unit_price) AS total
+            FROM invoice i
+            JOIN invoice_line il ON il.invoice_id = i.id
+            WHERE i.status IN ('CONFIRMED', 'PAID')
             GROUP BY i.id, i.customer_name, i.status
             ORDER BY i.id
         """;
