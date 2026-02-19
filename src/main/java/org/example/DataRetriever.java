@@ -129,4 +129,39 @@ public class DataRetriever {
         }
         return 0.0;
     }
+
+    // Q5-A - HT / TVA / TTC
+
+    public List<InvoiceTaxSummary> findInvoiceTaxSummaries() throws SQLException {
+
+        String sql = """
+            SELECT
+                i.id,
+                SUM(il.quantity * il.unit_price) AS total_ht,
+                SUM(il.quantity * il.unit_price) * (t.rate / 100) AS total_tva,
+                SUM(il.quantity * il.unit_price) * (1 + t.rate / 100) AS total_ttc
+            FROM invoice i
+            JOIN invoice_line il ON il.invoice_id = i.id
+            CROSS JOIN tax_config t
+            GROUP BY i.id, t.rate
+            ORDER BY i.id
+        """;
+
+        List<InvoiceTaxSummary> result = new ArrayList<>();
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                result.add(new InvoiceTaxSummary(
+                        rs.getInt("id"),
+                        rs.getBigDecimal("total_ht"),
+                        rs.getBigDecimal("total_tva"),
+                        rs.getBigDecimal("total_ttc")
+                ));
+            }
+        }
+        return result;
+    }
+
 }
