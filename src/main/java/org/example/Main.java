@@ -2,7 +2,6 @@ package org.example;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.List;
 import java.math.BigDecimal;
 
@@ -10,11 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String url = "jdbc:postgresql://localhost:5432/pushdownprocessing";
-        String user = "postgres";
-        String password = "tsilakely2220";
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+        try (Connection connection = DBConnection.getConnection()) {
 
             DataRetriever dr = new DataRetriever(connection);
 
