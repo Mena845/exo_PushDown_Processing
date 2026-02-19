@@ -10,9 +10,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String url = "jdbc:postgresql://localhost:5432/ton_database";
+        String url = "jdbc:postgresql://localhost:5432/pushdownprocessing";
         String user = "postgres";
-        String password = "postgres";
+        String password = "tsilakely2220";
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
 
