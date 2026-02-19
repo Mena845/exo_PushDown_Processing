@@ -101,4 +101,32 @@ public class DataRetriever {
         }
         return new InvoiceStatusTotals(0, 0, 0);
     }
+
+    // Q4 - CA pondéré
+
+    public Double computeWeightedTurnover() throws SQLException {
+
+        String sql = """
+            SELECT SUM(
+                CASE
+                    WHEN i.status = 'PAID'
+                        THEN il.quantity * il.unit_price
+                    WHEN i.status = 'CONFIRMED'
+                        THEN il.quantity * il.unit_price * 0.5
+                    ELSE 0
+                END
+            ) AS weighted_turnover
+            FROM invoice i
+            JOIN invoice_line il ON il.invoice_id = i.id
+        """;
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            if (rs.next()) {
+                return rs.getDouble("weighted_turnover");
+            }
+        }
+        return 0.0;
+    }
 }
